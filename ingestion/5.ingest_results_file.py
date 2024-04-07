@@ -47,7 +47,7 @@ results_df = spark.read.json(f"{raw_folder_path}/results.json", schema= results_
 
 # COMMAND ----------
 
-results_names_changed_df = results_df.withColumnsRenamed({"resultId": "result_id", "raceId" : "race_id", "driverId": "driver_id", "constructorId": "constructor_id", "positionText": "position_text", "positionOrder" : "position_order", "fastestLapTime" : "fastest_lap_time", "fastestLapSpeed" : "fastest_lap_speed"}) \
+results_names_changed_df = results_df.withColumnsRenamed({"resultId": "result_id", "raceId" : "race_id", "driverId": "driver_id", "constructorId": "constructor_id", "positionText": "position_text", "positionOrder" : "position_order", "fastestLapTime" : "fastest_lap_time", "fastestLapSpeed" : "fastest_lap_speed", "fastestLap" : "fastest_lap"}) \
     .drop("statusId") \
     .withColumn("data_source", lit(v_data_source))
 
