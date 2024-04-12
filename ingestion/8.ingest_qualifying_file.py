@@ -47,11 +47,7 @@ qualifying_final_df = add_ingestion_date(qualifying_names_changed_df)
 
 # COMMAND ----------
 
-qualifying_final_df.write.mode("overwrite").parquet(f"{processed_folder_path}/qualifying")
-
-# COMMAND ----------
-
-display(spark.read.parquet(f"{processed_folder_path}/qualifying"))
+qualifying_final_df.write.mode("overwrite").format("parquet").saveAsTable("F1_PROCESSED.qualifying")
 
 # COMMAND ----------
 

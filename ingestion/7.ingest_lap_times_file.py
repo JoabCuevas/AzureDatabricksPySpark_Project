@@ -44,11 +44,7 @@ lap_times_final_df = add_ingestion_date(lap_times_names_changed_df)
 
 # COMMAND ----------
 
-lap_times_final_df.write.mode("overwrite").parquet(f"{processed_folder_path}/lap_times")
-
-# COMMAND ----------
-
-display(spark.read.parquet(f"{processed_folder_path}/lap_times"))
+lap_times_final_df.write.mode("overwrite").format("parquet").saveAsTable("F1_PROCESSED.lap_times")
 
 # COMMAND ----------
 

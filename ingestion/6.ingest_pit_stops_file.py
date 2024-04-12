@@ -45,11 +45,7 @@ pit_stops_final_df = add_ingestion_date(pit_stops_names_changed_df)
 
 # COMMAND ----------
 
-pit_stops_final_df.write.mode("overwrite").parquet(f"{processed_folder_path}/pit_stops")
-
-# COMMAND ----------
-
-display(spark.read.parquet(f"{processed_folder_path}/pit_stops"))
+pit_stops_final_df.write.mode("overwrite").format("parquet").saveAsTable("F1_PROCESSED.pit_stops")
 
 # COMMAND ----------
 

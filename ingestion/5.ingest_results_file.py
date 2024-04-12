@@ -12,6 +12,11 @@ v_data_source = dbutils.widgets.get("p_data_source")
 
 # COMMAND ----------
 
+dbutils.widgets.text("p_file_date", "2021-03-28")
+v_file_date = dbutils.widgets.get("p_file_date")
+
+# COMMAND ----------
+
 from pyspark.sql.types import StructType, StructField, StringType, IntegerType, DoubleType
 
 # COMMAND ----------
@@ -43,13 +48,14 @@ from pyspark.sql.functions import lit
 
 # COMMAND ----------
 
-results_df = spark.read.json(f"{raw_folder_path}/results.json", schema= results_schema)
+results_df = spark.read.json(f"{raw_folder_path}/{v_file_date}/results.json", schema= results_schema)
 
 # COMMAND ----------
 
 results_names_changed_df = results_df.withColumnsRenamed({"resultId": "result_id", "raceId" : "race_id", "driverId": "driver_id", "constructorId": "constructor_id", "positionText": "position_text", "positionOrder" : "position_order", "fastestLapTime" : "fastest_lap_time", "fastestLapSpeed" : "fastest_lap_speed", "fastestLap" : "fastest_lap"}) \
     .drop("statusId") \
-    .withColumn("data_source", lit(v_data_source))
+    .withColumn("data_source", lit(v_data_source)) \
+    .withColumn("file_date", lit(v_file_date))
 
 # COMMAND ----------
 
@@ -57,11 +63,7 @@ results_final_df = add_ingestion_date(results_names_changed_df)
 
 # COMMAND ----------
 
-results_final_df.write.mode("overwrite").parquet(f"{processed_folder_path}/results", partitionBy="race_id")
-
-# COMMAND ----------
-
-display(spark.read.parquet(f"{processed_folder_path}/results"))
+results_final_df.write.mode("append").format("parquet").saveAsTable("F1_PROCESSED.results")
 
 # COMMAND ----------
 
